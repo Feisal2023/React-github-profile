@@ -20,7 +20,7 @@ function App() {
 
   return (
     <div
-      className="relative w-96 mx-auto my-16 p-10 md:p-5 bg-white border border-1
+      className="md:max-w-[500px]  relative w-96 mx-auto my-16 p-10 md:p-5 bg-white border border-1
     border-gray-300 rounded-lg shadow-md text-center"
     >
       <input
