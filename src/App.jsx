@@ -9,6 +9,7 @@ function App() {
   const [userDetails, setUserDetails] = useState(null);
   const [userNotFound, setUserNotFound] = useState(false);
   const [searchUser, setSearchUser] = useState(false);
+  // Extract the year from created_at timestamp
 
   const searchUsers = async () => {
     try {
@@ -20,8 +21,10 @@ function App() {
       const { data } = await axios.get(
         `https://api.github.com/users/${userInputValue}`
       );
+
       setUsers([data]); // Update users array with fetched user data
       setUserDetails(data); // Set userDetails for displaying single user details
+
       setSearchUser(false);
     } catch (error) {
       console.error("Error fetching user:", error);
@@ -46,26 +49,32 @@ function App() {
       <button className="absolute py-3 mt-2" onClick={searchUsers}>
         <LuSearch className="w-10 h-10 rounded-lg text-blue-700" />
       </button>
-      {users.map((user) => (
-        <div key={user.id} className="profile-info">
-          <img
-            src={user.avatar_url}
-            alt=""
-            className="rounded-full h-32 w-32 mx-auto mb-4"
-          />
-          <h3 className="text-xl font-semibold mb-2">Name: {user.name}</h3>
-          <p className="text-gray-600">Username: {user.login}</p>
-          <div className="follow mt-4">
-            <p>Following: {user.following}</p>
-            <p>Followers: {user.followers}</p>
+      {users.map((user) => {
+        const createdAt = new Date(user.created_at);
+        const year = createdAt.getFullYear();
+
+        return (
+          <div key={user.id} className="profile-info">
+            <img
+              src={user.avatar_url}
+              alt=""
+              className="rounded-full h-32 w-32 mx-auto mb-4"
+            />
+            <h3 className="text-xl font-semibold mb-2">Name: {user.name}</h3>
+            <p className="text-gray-600">Username: {user.login}</p>
+            <p className="text-gray-600">Joined: {year}</p>
+            <div className="follow mt-4">
+              <p>Following: {user.following}</p>
+              <p>Followers: {user.followers}</p>
+            </div>
+            <button className="bg-blue-500 text-white py-2 px-4 rounded mt-4">
+              <a href={user.html_url} target="_blank" rel="noopener noreferrer">
+                Visit
+              </a>
+            </button>
           </div>
-          <button className="bg-blue-500 text-white py-2 px-4 rounded mt-4">
-            <a href={user.html_url} target="_blank" rel="noopener noreferrer">
-              Visit
-            </a>
-          </button>
-        </div>
-      ))}
+        );
+      })}
       {userNotFound && (
         <div className="profile-info">
           <p>User not found</p>
